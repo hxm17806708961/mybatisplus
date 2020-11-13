@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Wrapper;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +36,10 @@ class UserMapperTest {
 //        wrapper.select();
 //        wrapper.gt("age",1);
 //        wrapper.allEq(map);
-        wrapper.orderByDesc("age");
-        wrapper.having("id > 1");
+
+        //排序加条件查询
+//        wrapper.orderByDesc("age");
+//        wrapper.having("id > 1");
 
 //        mapper.selectList(wrapper).forEach(System.err::println);
 
@@ -56,8 +59,8 @@ class UserMapperTest {
 //        result.getRecords().forEach(System.err::println);
 
         Page<Map<String,Object>> mapPage = new Page<>(2,3);
-        Page<Map<String, Object>> resultmap = mapper.selectMapsPage(mapPage, null);
-        resultmap.getRecords().forEach(System.err::println);
+        Page<Map<String, Object>> resultMap = mapper.selectMapsPage(mapPage, null);
+        resultMap.getRecords().forEach(System.err::println);
     }
 
     @Test
@@ -95,6 +98,29 @@ class UserMapperTest {
     }
     @Test
     void delete(){
-        mapper.deleteById(1);
+        //1. 删除By id
+//        mapper.deleteById(1);
+        //2. 删除多行
+//        mapper.deleteBatchIds(Arrays.asList(4,5));
+
+        //3. 多条件删除
+//        QueryWrapper wrapper = new QueryWrapper();
+//        wrapper.eq("id",4);
+//        mapper.delete(wrapper);
+
+        //4. map复合删除 where 1 = ?  and 2 = ?
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",2);
+//        map.put("name","mmm");
+        mapper.deleteByMap(map);
+
+    }
+
+
+    //多表关联查询
+    @Test
+    void selectProduct(){
+        mapper.productList(1).forEach(System.err::println);
+
     }
 }
